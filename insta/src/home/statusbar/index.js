@@ -85,7 +85,7 @@ const [username,setusername]=useState(null)
   useEffect(() => {
     setloader(true)
     async function renderstories() {
-      const url = "http://localhost:3000/stories";
+      const url = "https://instaserver-c9tt.onrender.com/stories";
       const responce = await fetch(url, {
         method: "POST",
         body: JSON.stringify({ jwtToken: Cookies.get("jwtToken") }),
@@ -95,7 +95,7 @@ const [username,setusername]=useState(null)
       });
       const data = await responce.json();
       setStories(data.users_stories);
-      const urlpost = "http://localhost:3000/posts";
+      const urlpost = "https://instaserver-c9tt.onrender.com/posts";
       const postresponce = await fetch(urlpost, {
         method: "POST",
         body: JSON.stringify({ jwtToken: Cookies.get("jwtToken") }),

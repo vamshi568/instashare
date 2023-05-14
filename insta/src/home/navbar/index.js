@@ -43,7 +43,7 @@ export const Navbar = () => {
     setloader(true)
     const jwtToken = Cookies.get("jwtToken");
     const body = { searchInput: seacrhInput, jwtToken: jwtToken };
-    const response = await fetch(`http://localhost:3000/search`, {
+    const response = await fetch(`https://instaserver-c9tt.onrender.com/search`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

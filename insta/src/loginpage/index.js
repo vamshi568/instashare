@@ -23,7 +23,7 @@ export const Index = () => {
     event.preventDefault();
     const userDetails = {username,password}
     
-    const url =  "http://localhost:3000/login";
+    const url =  "https://instaserver-c9tt.onrender.com/login";
     const options = {
       method: "POST",
       headers: {

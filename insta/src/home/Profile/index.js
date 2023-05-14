@@ -65,7 +65,7 @@ export const Profile = () => {
   useEffect(() => {
     async function renderstories() {
       setloader(true)
-      const url = "http://localhost:3000/myprofile";
+      const url = "https://instaserver-c9tt.onrender.com/myprofile";
       const responce = await fetch(url, {
         method: "POST",
         body: JSON.stringify({ jwtToken: Cookies.get("jwtToken") }),
@@ -80,7 +80,7 @@ export const Profile = () => {
     }
     async function renderuser() {
       setloader(true)
-      const url = "http://localhost:3000/userprofile";
+      const url = "https://instaserver-c9tt.onrender.com/userprofile";
       const responce = await fetch(url, {
         method: "POST",
         body: JSON.stringify({ jwtToken: Cookies.get("jwtToken"),userId:userid }),
