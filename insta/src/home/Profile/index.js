@@ -141,7 +141,7 @@ export const Profile = () => {
         <div className=" px-4 flex sm:gap-x-20 gap-x-3 items-center justify-start sm:mt-9 mt-2 max-w-[1040px] sm:w-11/12 w-screen">
 
           <img
-            className="sm:h-44 h-20 "
+            className="sm:h-44 h-20 rounded-full"
             src={myprofile.profile_pic}
             alt={myprofile.user_id}
             
