@@ -2,6 +2,8 @@ import "./index.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import { MutatingDots } from "react-loader-spinner";
+
 export const Index = () => {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,6 +11,7 @@ export const Index = () => {
   const jwtToken = Cookies.get("jwtToken");
   const navigate = useNavigate();
   const checkbox = document.getElementById("checkmark");
+  const [isloading,setload]=useState(false)
 
   const onSubmitSuccess = (token) => {
 
@@ -20,7 +23,10 @@ export const Index = () => {
   };
 
   const login = async (event) => {
+
     event.preventDefault();
+    setload(true)
+    setError('')
     const userDetails = {username,password}
     
     const url =  "https://instaserver-c9tt.onrender.com/login";
@@ -41,6 +47,7 @@ export const Index = () => {
       setError(data.error_msg)
       
     }
+    setload(false)
   };
   useEffect(() => {
     if (jwtToken) {
@@ -74,7 +81,7 @@ export const Index = () => {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address
+                  UserId
                 </label>
                 <div className="mt-2">
                   <input
@@ -84,6 +91,7 @@ export const Index = () => {
                     name="email"
                     type="text"
                     autoComplete="email"
+                    placeholder="Rahul"
                     required
                     className=" bg-gray-200 block w-full border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -112,6 +120,7 @@ export const Index = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     id="password"
+                    placeholder="rahul@2021"
                     name="password"
                     type="password"
                     autoComplete="current-password"
@@ -136,6 +145,11 @@ export const Index = () => {
                 >
                   Sign in
                 </button>
+                {isloading && 
+                <div className='flex justify-center'>
+                  < MutatingDots height="100"
+    width="100" radius='10.5' />
+                  </div>}
                 {error.length>0?<p className="text-red-600">*{error}</p>:null}
               </div>
             </form>

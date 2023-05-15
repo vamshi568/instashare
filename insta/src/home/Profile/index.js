@@ -10,7 +10,10 @@ import { Discuss } from "react-loader-spinner";
 export const Profile = () => {
   const userid = useSelector(selectuser);
   const [isloading,setloader]=useState(false)
-
+  const [isClicked, setIsClicked] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [userprofileimg,setuserimg]=useState(null)
+  const [username,setusername]=useState(null)
   const [myprofile, setprofile] = useState({
     followers_count: 29,
     following_count: 24,
@@ -109,25 +112,46 @@ export const Profile = () => {
       )
       
     }
+    const renderstatus=(url)=>{
+  
+      setSelectedImage(url);
+      setIsClicked(true)
+          setuserimg(myprofile.profile_pic)
+          setusername(myprofile.user_name)
+        
+
+      
+     
+    }
 
   return (
     <>
+    {isClicked && (
+        <div className="selected-image-overlay flex flex-col p-2" onClick={() => setIsClicked(false)}>
+          <div className="flex items-center sm:w-8/12 max-w-[1040px] w-screen gap-3 mt-3 mb-2">
+            <img className="rounded-full h-12 w-12" src={userprofileimg} alt='hdsj'/>
+            <b className="text-white">{username}</b>
+          </div>
+          <img src={selectedImage} alt="SelectedImage" className="selected-image" />
+        </div>
+      )}
       <div className="  w-screen flex items-center flex-col">
       <p className="text-3xl mt-2 sm:hidden inline w-11/12 text-gray-500">{myprofile.user_name}</p>
 
-        <div className=" px-4 flex gap-x-20 items-center justify-start sm:mt-9 mt-2 max-w-[1040px] sm:w-11/12 w-screen">
+        <div className=" px-4 flex sm:gap-x-20 gap-x-3 items-center justify-start sm:mt-9 mt-2 max-w-[1040px] sm:w-11/12 w-screen">
 
           <img
-            className="h-44 "
+            className="sm:h-44 h-20 "
             src={myprofile.profile_pic}
             alt={myprofile.user_id}
+            
           />
           <div className="flex flex-col">
             <p className="text-4xl mb-6 sm:inline hidden">{myprofile.user_name}</p>
-            <div className="flex gap-4  mb-4 text-center">
-              <p><span className="font-medium">{myprofile.posts_count}</span> posts</p>
-              <p><span className="font-medium ">{myprofile.followers_count}</span> followers</p>
-              <p><span className="font-medium">{myprofile.following_count}</span> following</p>
+            <div className="flex gap-4 flex-wrap justify-center  mb-4 text-center">
+              <p className="sm:inline flex flex-col"><span className="font-medium">{myprofile.posts_count}</span> posts</p>
+              <p className="sm:inline flex flex-col"><span className="font-medium ">{myprofile.followers_count}</span> followers</p>
+              <p className="sm:inline flex flex-col"><span className="font-medium">{myprofile.following_count}</span> following</p>
             </div>
             <p className="font-medium mb-2 sm:inline hidden">{myprofile.user_id}</p>
             <p className="font-normal sm:inline hidden">{myprofile.user_bio}</p>
@@ -144,19 +168,20 @@ export const Profile = () => {
                 className="h-20 w-20 border-2 border-solid border-[#DBDBDB] p-1 rounded-full"
                 src={e.image}
                 alt={e.id}
+                onClick={()=>renderstatus(e.image)}
               />
             </div>
           ))}
         </div>
         <hr className="sm:w-11/12 w-screen  border-[#C6C6C8] mt-9 max-w-[1040px]" />
-        <div className="px-4 sm:w-11/12 w-screen max-w-[1040px] flex items-center gap-4 mt-9">
+        <div className="px-4 sm:w-11/12 w-screen max-w-[1040px] flex items-start gap-4 mt-9">
           <BsFillPostcardHeartFill className="text-3xl" />
           <p className="text-4xl font-medium">Posts</p>
         </div>
         {myprofile.posts.length > 0 ? (
           <div className="flex flex-wrap sm:w-11/12 w-screen sm:gap-6 pl-2 max-w-[1040px] gap-1 mt-6 mb-11">
             {myprofile.posts.map((e) => (
-              <img key={e.id} className=" w-[32%] h-[30%]  sm:h-[31%] sm:w-[31%]" src={e.image} alt={e.id} />
+              <img key={e.id} className=" w-[32%] h-[30%]  sm:h-[31%] sm:w-[31%]" src={e.image} alt={e.id} onClick={()=>renderstatus(e.image)} />
             ))}
           </div>
         ) : (
