@@ -148,7 +148,7 @@ export const Profile = () => {
           />
           <div className="flex flex-col">
             <p className="text-4xl mb-6 sm:inline hidden">{myprofile.user_name}</p>
-            <div className="flex gap-4 flex-wrap justify-center  mb-4 text-center">
+            <div className="flex gap-4 flex-wrap sm:justify-start justify-center  mb-4 text-center">
               <p className="sm:inline flex flex-col"><span className="font-medium">{myprofile.posts_count}</span> posts</p>
               <p className="sm:inline flex flex-col"><span className="font-medium ">{myprofile.followers_count}</span> followers</p>
               <p className="sm:inline flex flex-col"><span className="font-medium">{myprofile.following_count}</span> following</p>
