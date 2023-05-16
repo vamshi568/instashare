@@ -37,7 +37,7 @@ function Prevarrow(props) {
 export const Status = () => {
   const [renderStories, setStories] = useState([]);
   const [renderPosts, setPosts] = useState([]);
-  const [like,setlike]=useState(false)
+  const [like,setlike]=useState([])
   const dispatch = useDispatch();
   const [isloading,setloader]=useState(false)
   const [isClicked, setIsClicked] = useState(false);
@@ -75,7 +75,7 @@ const [username,setusername]=useState(null)
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
@@ -130,6 +130,17 @@ const renderstatus=(url,userid)=>{
     }
   }
 }
+const updatedlike=(index)=>{
+  const likearray=[...like]
+  likearray[index] = false; // Update the value at the clicked index to true
+  setlike(likearray);
+}
+
+const dislike=(index)=>{
+  const likearray=[...like]
+  likearray[index] = true; // Update the value at the clicked index to true
+  setlike(likearray); 
+}
 
 
   if (isloading){
@@ -171,7 +182,8 @@ const renderstatus=(url,userid)=>{
         </div>
       </div>
       
-      {renderPosts.map((e) => (
+      {renderPosts.map((e,index) => (
+        
         <div className="flex flex-col items-center w-screen" key={e.post_id}>
           <div className="flex gap-4 py-4 px-6 items-center sm:w-11/12 max-w-[1040px] w-screen border-solid border-b-0 border-2 border-[#DBDBDB] rounded-t-md">
             <div className="image-container">
@@ -190,18 +202,18 @@ const renderstatus=(url,userid)=>{
                 }>{e.user_name}</p>
           </div>
           <img
-            className="w-screen max-w-[1040px] sm:w-11/12 h-[710px]"
+            className="w-screen max-w-[1040px] sm:w-11/12 sm:h-[710px] h-[400px]"
             src={e.post_details.image_url}
             alt={e.user_id}
           />
           <div className="gap-2 flex flex-col border-2 py-4 px-6 border-[#DBDBDB] mb-8 rounded-b-md border-solid w-screen max-w-[1040px] sm:w-11/12">
             <div className="flex gap-4 mb-3">
 
-            {like?<BsFillArrowThroughHeartFill className="text-2xl" onClick={()=>setlike(false)}/>:<AiOutlineHeart className="text-2xl" onClick={()=>setlike(true)}/>}
+            {like[index]?<BsFillArrowThroughHeartFill className="text-2xl" onClick={()=>updatedlike(index)}/>:<AiOutlineHeart className="text-2xl" onClick={()=>dislike(index)}/>}
             <AiOutlineComment className="text-2xl"/>
             <TbShare3 className="text-2xl"/>
             </div>
-            <b>{e.likes_count} Likes</b>
+            <b>{like[index]===true?e.likes_count +1 : e.likes_count}  Likes</b>
             <p>{e.post_details.caption}</p>
             <p><b>{e.comments[0].user_name} </b> {e.comments[0].comment}</p>
             <p><b>{e.comments[1].user_name} </b> {e.comments[1].comment}</p>

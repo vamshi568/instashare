@@ -19,19 +19,24 @@ export const Navbar = () => {
   const [showmenu, setIsActive] = useState(false);
   const [showsearch, setshowserch] = useState(false);
   let [count, setcount] = useState(0);
+  let [color, setcolor] = useState(false);
   const dispatch = useDispatch();
   const isActive = useSelector(selectIsLoggedIn);
   const jwtToken = Cookies.get("jwtToken");
-  const [isloading,setloader]=useState(false)
+  const [isloading, setloader] = useState('status');
+  
 
   const handleHomeClick = () => {
+    setloader('status')
     dispatch(setIsLoggedIn(false));
+    setcolor(false)
   };
 
   const handleProfileClick = () => {
     dispatch(setUserId(null));
-
-    dispatch(setIsLoggedIn(true));
+setloader('user')
+    dispatch(setIsLoggedIn(false));
+    setcolor(true)
   };
   const navigate = useNavigate();
   const logingOut = () => {
@@ -40,20 +45,23 @@ export const Navbar = () => {
   };
 
   const getSearch = async () => {
-    setloader(true)
+    setloader("loader");
     const jwtToken = Cookies.get("jwtToken");
     const body = { searchInput: seacrhInput, jwtToken: jwtToken };
-    const response = await fetch(`https://instaserver-c9tt.onrender.com/search`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      `https://instaserver-c9tt.onrender.com/search`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
     const data = await response.json();
     setPost(data.posts);
-    setloader(false)
+    setloader("search");
     setresults(true);
     setcount(0);
   };
@@ -69,7 +77,11 @@ export const Navbar = () => {
   if (seacrhInput.length <= 0 && count < 2) {
     setresults(false);
     setcount((count += 1));
+    setloader('status')
+    dispatch(setIsLoggedIn(false));
+    setcolor(false)
   }
+  
 
   useEffect(() => {
     const token = Cookies.get("jwtToken");
@@ -83,21 +95,26 @@ export const Navbar = () => {
   const Loader = () => {
     return (
       <div className="h-[90vh] w-screen flex justify-center items-center">
-      <Discuss
-      
-      visible={true}
-      height="80"
-      width="80"
-      ariaLabel="comment-loading"
-      wrapperStyle={{}}
-        wrapperClass="comment-wrapper"
-        color="#fff"
-        backgroundColor="#F4442E"
+        <Discuss
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="comment-loading"
+          wrapperStyle={{}}
+          wrapperClass="comment-wrapper"
+          color="#fff"
+          backgroundColor="#F4442E"
         />
-        </div>
+      </div>
     );
   };
-  
+
+  // if (isActive){
+  //   setloader('user')
+  // }
+  // else{
+  //   setloader(null)
+  // }
 
   return (
     <>
@@ -132,13 +149,13 @@ export const Navbar = () => {
             </div>
             <h2
               onClick={handleHomeClick}
-              style={{ color: isActive ? "black" : "blue", cursor: "pointer" }}
+              style={{ color: color ? "black" : "blue", cursor: "pointer" }}
             >
               Home
             </h2>
             <h2
               onClick={handleProfileClick}
-              style={{ color: isActive ? "blue" : "black", cursor: "pointer" }}
+              style={{ color: color ? "blue" : "black", cursor: "pointer" }}
             >
               Profile
             </h2>
@@ -198,14 +215,29 @@ export const Navbar = () => {
 
       <hr className="border-1 border-solid border-gray-500" />
 
-
-      {isloading? <Loader/> :isActive ? (
+      {/* {isloading? <Loader/> :isActive ? (
         <Profile />
       ) : searchresult ? (
         <SearchResults setPost={renderPost} />
       ) : (
         <Status />
-      )}
+      )} */}
+      {console.log(isloading)}
+      
+      {isActive?<Profile />:(() => {
+        switch (isloading) {
+          case "loader":
+            return <Loader />;
+          case "search":
+            return <SearchResults setPost={renderPost} />;
+          case "user":
+            return <Profile />;
+          case 'status':
+            return <Status />;
+          default:
+            <Status />;
+          }
+        })()}
     </>
   );
 };
