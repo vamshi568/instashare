@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "./index.css";
 import Cookies from "js-cookie";
 import { FcNext, FcPrevious } from "react-icons/fc";
-import { AiOutlineHeart,AiOutlineComment } from "react-icons/ai";
+import { AiOutlineHeart,AiOutlineComment,AiOutlineSend } from "react-icons/ai";
 import { BsFillArrowThroughHeartFill } from "react-icons/bs";
 import { TbShare3 } from "react-icons/tb";
 import {  useDispatch } from 'react-redux';
@@ -44,6 +44,10 @@ export const Status = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 const [userprofileimg,setuserimg]=useState(null)
 const [username,setusername]=useState(null)
+const [comment,setcommet]=useState([])
+const [comment1,setcommet1]=useState([])
+const [commetmsg,setcommentmsg]=useState('')
+const [commetmsg1,setcommentmsg1]=useState([])
 
 
   var settings = {
@@ -81,6 +85,7 @@ const [username,setusername]=useState(null)
       },
     ],
   };
+  
 
   useEffect(() => {
     setloader(true)
@@ -140,6 +145,31 @@ const dislike=(index)=>{
   const likearray=[...like]
   likearray[index] = true; // Update the value at the clicked index to true
   setlike(likearray); 
+}
+const submitcomment=(index)=>{
+  const comear=[...comment]
+  comear[index]=false
+  setcommet(comear)
+  if (commetmsg.length>0){
+    const commentar=[...comment1]
+    commentar[index]=true
+    setcommet1(commentar)
+    const comets=[...commetmsg1]
+  comets[index]=commetmsg
+  setcommentmsg1(comets)
+  }
+  setcommentmsg('')
+}
+const setcometd=(index,e)=>{
+  setcommentmsg(e.target.value)
+  
+}
+const commentvisible=(index)=>{
+  const comear=[...comment]
+  comear[index]=!comear[index]
+  setcommet(comear)
+
+
 }
 
 
@@ -210,13 +240,24 @@ const dislike=(index)=>{
             <div className="flex gap-4 mb-3">
 
             {like[index]?<BsFillArrowThroughHeartFill className="text-2xl" onClick={()=>updatedlike(index)}/>:<AiOutlineHeart className="text-2xl" onClick={()=>dislike(index)}/>}
-            <AiOutlineComment className="text-2xl"/>
+            <AiOutlineComment className="text-2xl" onClick={()=>commentvisible(index)}/>
             <TbShare3 className="text-2xl"/>
             </div>
+            {comment[index] && <form onSubmit={()=>submitcomment(index)} className="flex gap-2  rounded-md items-center border-2 border-gray-300 border-solid w-fit">
+                <input type="text" required  className="p-2" placeholder="comment here" value={commetmsg} onChange={(e)=>setcometd(index,e)}/>
+                <button type="submit"  >
+
+                <AiOutlineSend />
+                </button>
+            </form>}
             <b>{like[index]===true?e.likes_count +1 : e.likes_count}  Likes</b>
             <p>{e.post_details.caption}</p>
             <p><b>{e.comments[0].user_name} </b> {e.comments[0].comment}</p>
             <p><b>{e.comments[1].user_name} </b> {e.comments[1].comment}</p>
+            {comment1[index] &&
+              <p><b>Rahul </b> {commetmsg1[index]}</p>
+
+            }
             <p className="text-[#989898]">{e.created_at}</p>
           </div>
         </div>
